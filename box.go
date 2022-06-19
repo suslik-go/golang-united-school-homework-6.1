@@ -1,6 +1,15 @@
 package golang_united_school_homework
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var (
+	errorNotEnoughCapacity = errors.New("There is no enough capacity")
+	errorNotExistingIndex  = errors.New("There is no shape with such index")
+	errorNotCircleFound    = errors.New("There is no circle in the shapes")
+)
 
 // box contains list of shapes and able to perform operations on them
 type box struct {
@@ -20,7 +29,7 @@ func NewBox(shapesCapacity int) *box {
 func (b *box) AddShape(shape Shape) error {
 	//panic("implement me")
 	if len(b.shapes) == b.shapesCapacity {
-		return fmt.Errorf("%w", "There is not enough capacity")
+		return fmt.Errorf("%w", errorNotEnoughCapacity)
 	}
 	b.shapes = append(b.shapes, shape)
 	return nil
@@ -31,7 +40,7 @@ func (b *box) AddShape(shape Shape) error {
 func (b *box) GetByIndex(i int) (Shape, error) {
 	//	panic("implement me")
 	if i <= 0 || i > b.shapesCapacity {
-		return nil, fmt.Errorf("%w", "There is no shape with such index")
+		return nil, fmt.Errorf("%w", errorNotExistingIndex)
 	}
 
 	return b.shapes[i], nil
@@ -43,7 +52,7 @@ func (b *box) ExtractByIndex(i int) (Shape, error) {
 	//	panic("implement me")
 	shape, err := b.GetByIndex(i)
 	if err != nil {
-		return nil, fmt.Errorf("%w", "There is no shape with such index")
+		return nil, fmt.Errorf("%w", errorNotExistingIndex)
 	}
 
 	b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
@@ -57,7 +66,7 @@ func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
 	//	panic("implement me")
 	shape, err := b.GetByIndex(i)
 	if err != nil {
-		return nil, fmt.Errorf("%w", "There is no shape with such index")
+		return nil, fmt.Errorf("%w", errorNotExistingIndex)
 	}
 
 	b.shapes[i] = shape
@@ -91,17 +100,17 @@ func (b *box) SumArea() float64 {
 func (b *box) RemoveAllCircles() error {
 	//panic("implement me")
 	var exists bool
-	//for _, val := range b.shapes {
+	for i, val := range b.shapes {
 
-	//switch val.(type) {
-	// case Circle.(type):
-	// 	exists = true
-	// 	b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
-	// }
-	//}
+		switch val.(type) {
+		case *Circle:
+			exists = true
+			b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
+		}
+	}
 
 	if exists == false {
-		return fmt.Errorf("%w", "There is no circle in the shapes")
+		return fmt.Errorf("%w", errorNotCircleFound)
 	}
 	return nil
 }
