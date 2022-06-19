@@ -23,6 +23,7 @@ func (b *box) AddShape(shape Shape) error {
 		return fmt.Errorf("%w", "There is not enough capacity")
 	}
 	b.shapes = append(b.shapes, shape)
+	return nil
 }
 
 // GetByIndex allows getting shape by index
@@ -90,15 +91,17 @@ func (b *box) SumArea() float64 {
 func (b *box) RemoveAllCircles() error {
 	//panic("implement me")
 	var exists bool
-	for i, val := range b.shapes {
-		switch val.(type) {
-		case Circle:
-			exists = true
-			b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
-		}
-	}
+	//for _, val := range b.shapes {
+
+	//switch val.(type) {
+	// case Circle.(type):
+	// 	exists = true
+	// 	b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
+	// }
+	//}
 
 	if exists == false {
 		return fmt.Errorf("%w", "There is no circle in the shapes")
 	}
+	return nil
 }
